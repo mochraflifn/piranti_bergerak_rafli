@@ -18,6 +18,7 @@ class FeedCard extends StatefulWidget {
 
 class _FeedCardState extends State<FeedCard> {
   bool isLiked = false; // State to track if the post is liked
+  bool isBookmarked = false; // State to track if the post is bookmarked
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +52,16 @@ class _FeedCardState extends State<FeedCard> {
                   children: [
                     IconButton(
                       onPressed: () {
-                        context.read<FeedController>().like
-                        (widget.feed);
+                        setState(() {
+                          isLiked = !isLiked; // Toggle the like state
+                        });
+                        context.read<FeedController>().like(widget.feed);
                       },
-                      icon: Icon(widget.feed.content.isLike? Icons.
-                      favorite: Icons.favorite_outline),
+                      icon: Icon(
+                        isLiked ? Icons.favorite : Icons.favorite_outline,
+                        color:
+                            isLiked ? Colors.red : Colors.grey, // Change color
+                      ),
                     ),
                     IconButton(
                       icon: const Icon(Icons.comment),
@@ -71,7 +77,19 @@ class _FeedCardState extends State<FeedCard> {
                     ),
                   ],
                 ),
-                const Icon(Icons.bookmark_border),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isBookmarked = !isBookmarked; // Toggle the bookmark state
+                    });
+                  },
+                  icon: Icon(
+                    isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                    color: isBookmarked
+                        ? Colors.blue
+                        : Colors.grey, // Change color
+                  ),
+                ),
               ],
             ),
           ),
@@ -81,7 +99,7 @@ class _FeedCardState extends State<FeedCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.feed.content.likes,
+                  '${widget.feed.content.likes} likes', // Display like count
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
