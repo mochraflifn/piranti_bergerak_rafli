@@ -2,11 +2,13 @@ class Feed {
   final int id;
   final User user;
   final Content content;
+  bool isBookmarked; // New property to track whether a feed is bookmarked
 
   Feed({
     required this.id,
     required this.user,
     required this.content,
+    this.isBookmarked = false, // Default value is false (not bookmarked)
   });
 }
 

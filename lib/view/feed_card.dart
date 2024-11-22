@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tes4/controller/feed_controller.dart';
 import 'package:tes4/model/feed.dart';
 
-class FeedCard extends StatefulWidget {
+class FeedCard extends StatelessWidget {
   final Feed feed;
 
   const FeedCard({
@@ -12,16 +12,9 @@ class FeedCard extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _FeedCardState createState() => _FeedCardState();
-}
-
-class _FeedCardState extends State<FeedCard> {
-  bool isLiked = false; // State to track if the post is liked
-  bool isBookmarked = false; // State to track if the post is bookmarked
-
-  @override
   Widget build(BuildContext context) {
+    final feedController = context.watch<FeedController>();
+
     return Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,15 +22,15 @@ class _FeedCardState extends State<FeedCard> {
           // Header
           ListTile(
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(widget.feed.user.avatar),
+              backgroundImage: NetworkImage(feed.user.avatar),
             ),
-            title: Text(widget.feed.user.name),
-            subtitle: Text(widget.feed.user.place),
+            title: Text(feed.user.name),
+            subtitle: Text(feed.user.place),
             trailing: const Icon(Icons.arrow_right),
           ),
           // Content
           Image.network(
-            widget.feed.content.image,
+            feed.content.image,
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width * 0.8,
             fit: BoxFit.cover,
@@ -52,42 +45,34 @@ class _FeedCardState extends State<FeedCard> {
                   children: [
                     IconButton(
                       onPressed: () {
-                        setState(() {
-                          isLiked = !isLiked; // Toggle the like state
-                        });
-                        context.read<FeedController>().like(widget.feed);
+                        feedController.like(feed); // Untuk like action
                       },
                       icon: Icon(
-                        isLiked ? Icons.favorite : Icons.favorite_outline,
-                        color:
-                            isLiked ? Colors.red : Colors.grey, // Change color
+                        feed.content.isLike ? Icons.favorite : Icons.favorite_outline,
+                        color: feed.content.isLike ? Colors.red : Colors.black,
                       ),
                     ),
                     IconButton(
                       icon: const Icon(Icons.comment),
                       onPressed: () {
-                        // Comment button action
+                        // Comment
                       },
                     ),
                     IconButton(
                       icon: const Icon(Icons.share),
                       onPressed: () {
-                        // Share button action
+                        // Share 
                       },
                     ),
                   ],
                 ),
                 IconButton(
                   onPressed: () {
-                    setState(() {
-                      isBookmarked = !isBookmarked; // Toggle the bookmark state
-                    });
+                    feedController.toggleBookmark(feed); // Toggle untuk bookmark
                   },
                   icon: Icon(
-                    isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-                    color: isBookmarked
-                        ? Colors.blue
-                        : Colors.grey, // Change color
+                    feed.isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                    color: feed.isBookmarked ? Colors.blue : Colors.black,
                   ),
                 ),
               ],
@@ -99,20 +84,20 @@ class _FeedCardState extends State<FeedCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${widget.feed.content.likes} likes', // Display like count
+                  feed.content.likes,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
                 Row(
                   children: [
                     Text(
-                      widget.feed.user.name,
+                      feed.user.name,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
-                        widget.feed.content.description,
+                        feed.content.description,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
