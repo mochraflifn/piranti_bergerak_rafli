@@ -29,7 +29,8 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const FeedBookmarkPage()),
+                MaterialPageRoute(
+                    builder: (context) => const FeedBookmarkPage()),
               );
             },
           ),
@@ -43,7 +44,8 @@ class _HomePageState extends State<HomePage> {
               },
               child: ListView.builder(
                 itemCount: controller.length,
-                itemBuilder: (context, index) => FeedCard(feed: controller.feed(index)),
+                itemBuilder: (context, index) =>
+                    FeedCard(feed: controller.feed(index)),
               ),
             ),
     );

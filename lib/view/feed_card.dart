@@ -48,7 +48,9 @@ class FeedCard extends StatelessWidget {
                         feedController.like(feed); // Untuk like action
                       },
                       icon: Icon(
-                        feed.content.isLike ? Icons.favorite : Icons.favorite_outline,
+                        feed.content.isLike
+                            ? Icons.favorite
+                            : Icons.favorite_outline,
                         color: feed.content.isLike ? Colors.red : Colors.black,
                       ),
                     ),
@@ -61,14 +63,15 @@ class FeedCard extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.share),
                       onPressed: () {
-                        // Share 
+                        // Share
                       },
                     ),
                   ],
                 ),
                 IconButton(
                   onPressed: () {
-                    feedController.toggleBookmark(feed); // Toggle untuk bookmark
+                    feedController
+                        .toggleBookmark(feed); // Toggle untuk bookmark
                   },
                   icon: Icon(
                     feed.isBookmarked ? Icons.bookmark : Icons.bookmark_border,
